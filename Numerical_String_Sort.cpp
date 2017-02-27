@@ -1,40 +1,29 @@
-//    Credit Goes To Mr. Emrul Chowdhury    //
-
-#include <bits/stdc++.h>
-#define LL long long int
+#include<bits/stdc++.h>
 using namespace std;
-
-map <LL, LL> mp;
-vector <string> v[2000005];
-vector <LL> v1;
-
+vector<string>s;
+bool compare(string s1, string s2)
+{
+    long long l1,l2;
+    l1=s1.size(),l2=s2.size();
+    if(l1!=l2)
+        return l1<l2;
+    else
+        return s1<s2;
+}
 int main()
 {
-    string s;
-    LL n,i ;
-
-    cin >> n;
-
-    for( i=0; i<n; i++ )
+    long long n,i;
+    string c;
+    cin>>n;
+    for(i=0; i<n; i++)
     {
-        cin >> s;
-        if( mp[s.size()] == 0 )
-        {
-            v1.push_back(s.size());
-        }
-        mp[ s.size() ]++;
-        v[ s.size() ].push_back(s);
+        cin>>c;
+        s.push_back(c);
     }
-
-    sort( v1.begin(), v1.end() );
-
-    for( i=0; i<v1.size(); i++ )
+    sort(s.begin(),s.end(),compare);
+    for(i=0; i<n; i++)
     {
-        sort( v[v1[i]].begin(), v[v1[i]].end() );
-        for( LL j=0; j<v[v1[i]].size(); j++ )
-        {
-            cout << v[v1[i]][j] << endl;
-        }
+        cout<<s[i]<<endl;
     }
     return 0;
 }
