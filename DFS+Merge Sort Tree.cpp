@@ -1,3 +1,8 @@
+/*
+        You will be given an edge weighted graph with N nodes numbered from 1 to N. 
+        If we want to drop all edges with weight lower than C, how many nodes will still be reachable from node 1?
+*/
+
 #include<bits/stdc++.h>
 using namespace std;
 #define MX 50000
