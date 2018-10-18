@@ -1,0 +1,10 @@
+Library Monitoring Files:
+
+RFID Tags
+RFID sensor
+Buzzer
+jumperWire
+BreadBoard
+Arduino
+buzzer + to digital input 3
+buzzer - to GND
