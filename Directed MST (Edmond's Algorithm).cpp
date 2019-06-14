@@ -1,93 +1,116 @@
-// tested on LightOJ 1380
-// dmst() template credit https://github.com/pin3da
-// used Edmond's Algorithm
+/* Algo
+1 . For each node find the minimum incoming edge except root
+2 . Look for cycle if there is no cycle its MST
+3 . If cycle then consider one cycle as a one single vertex , give every vertex a new indx  and again recalculate the every edge
+4 . goto step 2
+*/
+// Directed MST (Edmond's Algo) Template Credit https://github.com/shakilaust
+// Tested On LightOJ 1380
 
 #include<bits/stdc++.h>
 using namespace std;
-const int inf = 1000000 + 10;
+#define INF 1e9
+const int Maxn = 1005 ; // Highest Vertex
 
-struct edge {
-  int u, v, w;
-  edge() {}
-  edge(int a,int b,int c) : u(a), v(b), w(c) {}
+struct edge
+{
+    int u , v , w ;
+    edge() {}
+    edge(int _u, int _v , int _w ) { u = _u , v = _v , w = _w ; }
 };
 
-/**
- * Computes the minimum spanning tree for a directed graph
- * - edges : Graph description in the form of list of edges.
- *    each edge is: From node u to node v with cost w
- * - root  : Id of the node to start the DMST.
- * - n     : Number of nodes in the graph.
- * */
+int nodes , edges , root ; // nV = number of vertex , nE = number of edge , root is root
+int vis[Maxn] , parnt[Maxn] ; // vis[] will store from which cycle it belogs , pre[] store its parnt
+int Idx[Maxn] ; // will store new indxing Id
+int dis[Maxn] ; // store the lowest incoming edge of a root
+vector < edge > vec ;
 
-int dmst(vector<edge> &edges, int root, int n) {
-  int ans = 0;
-  int cur_nodes = n;
-  while (true) {
-    vector<int> lo(cur_nodes, inf), pi(cur_nodes, inf);
-    for (int i = 0; i < edges.size(); ++i) {
-      int u = edges[i].u, v = edges[i].v, w = edges[i].w;
-      if (w < lo[v] and u != v) {
-        lo[v] = w;
-        pi[v] = u;
-      }
+int DMST()
+{
+    int ans  = 0 , i , u ,  v , w  ;
+    while(true)
+    {
+        int i  ;
+        for(i=0;i<nodes;i++)
+        {
+            dis[i] = INF ;
+            vis[i] = -1 ;
+            Idx[i] = -1 ;
+        }
+        for(i=0;i<vec.size();i++)
+        {
+            u = vec[i].u ;
+            v = vec[i].v ;
+            w = vec[i].w ;
+            if ( u != v && dis[v] > w) // lowest Incoming Edge
+            {
+                parnt[v] = u ;
+                dis [v] = w ;
+            }
+        }
+        parnt[root] = root ;
+        dis[root] = 0 ;
+        for(i=0;i<nodes;i++)
+        {
+            if( dis[i] == INF )
+            {
+               return -1; // its not possible to reach
+            }
+            ans += dis[i];
+        }
+        int idx = 0 ;
+        // cycle detection
+        for(i=0;i<nodes;i++)
+        {
+
+            if(vis[i]==-1) // not yet visited
+            {
+                int cur = i ;
+                while ( vis[cur]==-1)
+                {
+                    vis[cur] = i ;
+                    cur = parnt[cur] ;
+                }
+                if ( cur == root || vis[cur] != i )  continue ; // not cycle
+                Idx[cur] = idx ; // new indexing
+                for (  u = parnt[cur] ; cur != u ; u = parnt[u] )
+                Idx[u] = idx ;
+                idx++;
+            }
+        }
+        if(idx==0) break ; // no cycle
+        for(i=0;i<nodes;i++)
+        {
+            if(Idx[i]==-1) // yet not find any grp
+            {
+                Idx[i] = idx++;
+            }
+        }
+        for(i=0;i<vec.size();i++)
+        {
+            vec[i].w -= dis[vec[i].v];
+            vec[i].u = Idx[vec[i].u] ;
+            vec[i].v = Idx[vec[i].v];
+        }
+        nodes = idx++;
+        root = Idx[root];
     }
-
-    lo[root] = 0;
-    for (int i = 0; i < lo.size(); ++i) {
-      if (i == root) continue;
-      if (lo[i] == inf) return -1;
-    }
-    int cur_id = 0;
-    vector<int> id(cur_nodes, -1), mark(cur_nodes, -1);
-    for (int i = 0; i < cur_nodes; ++i) {
-      ans += lo[i];
-      int u = i;
-      while (u != root and id[u] < 0 and mark[u] != i) {
-        mark[u] = i;
-        u = pi[u];
-      }
-      if (u != root and id[u] < 0) { // Cycle
-         for (int v = pi[u]; v != u; v = pi[v])
-           id[v] = cur_id;
-         id[u] = cur_id++;
-      }
-    }
-
-    if (cur_id == 0)
-      break;
-
-    for (int i = 0; i < cur_nodes; ++i)
-      if (id[i] < 0) id[i] = cur_id++;
-
-    for (int i = 0; i < edges.size(); ++i) {
-      int u = edges[i].u, v = edges[i].v, w = edges[i].w;
-      edges[i].u = id[u];
-      edges[i].v = id[v];
-      if (id[u] != id[v])
-        edges[i].w -= lo[v];
-    }
-    cur_nodes = cur_id;
-    root = id[root];
-  }
-
-  return ans;
+    return ans;
 }
 int main()
 {
-    int t,m,a,b,c,n,root;
+    int t,m,a,b,c,n;
     scanf("%d",&t);
-    vector<edge>vec;
     for(int cs=1; cs<=t; cs++)
     {
-        scanf("%d%d%d",&n,&m,&root);
-        for(int i=1; i<=m; i++)
+        scanf("%d%d%d",&nodes,&edges,&root);
+        for(int i=1; i<=edges; i++)
         {
             scanf("%d%d%d",&a,&b,&c);
             edge ede=edge(a,b,c);
             vec.push_back(ede);
         }
-        int ans=dmst(vec,root,n);
+        int ans=DMST();
         if(ans==-1)
             printf("Case %d: impossible\n",cs);
         else
