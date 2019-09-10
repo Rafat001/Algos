@@ -69,3 +69,21 @@ ll trailing_Zeroes_of_N_Factorial_in_base_b(ll n, ll b)
     if(b!=1) ans=min(ans,largestPower(n,b));
     return ans;
 }
+ll catalan_number(ll n) //returns nTh catalan number
+{
+    ll c=nCr(2*n,n);
+    return c/(n+1);
+    /* Application of catalan numbers
+    1. Number of possible Binary Search Trees with n keys.
+    2. Number of expressions containing n pairs of parentheses which are correctly matched. For n = 3, possible expressions are ((())), ()(()), ()()(), (())(), (()()).
+    3. Number of ways a convex polygon of n+2 sides can split into triangles by connecting vertices.
+    4. Number of full binary trees (A rooted binary tree is full if every vertex has either two children or no children) with n+1 leaves.
+    5. Number of different Unlabeled Binary Trees can be there with n nodes.
+    6. The number of paths with 2n steps on a rectangular grid from bottom left, i.e., (n-1, 0) to top right (0, n-1) that do not cross above the main diagonal.
+    7. Number of ways to insert n pairs of parentheses in a word of n+1 letters, e.g., for n=2 there are 2 ways: ((ab)c) or (a(bc)). For n=3 there are 5 ways, ((ab)(cd)), (((ab)c)d), ((a(bc))d), (a((bc)d)), (a(b(cd))).
+    8. Number of Dyck words of length 2n. A Dyck word is a string consisting of n X’s and n Y’s such that no initial segment of the string has more Y’s than X’s.  For example, the following are the Dyck words of length 6: XXXYYY     XYXXYY     XYXYXY     XXYYXY     XXYXYY.
+    9. Number of ways to form a “mountain ranges” with n upstrokes and n down-strokes that all stay above the original line.The mountain range interpretation is that the mountains will never go below the horizon.
+    10. Number of stack-sortable permutations of {1, …, n}. A permutation w is called stack-sortable if S(w) = (1, …, n), where S(w) is defined recursively as follows: write w = unv where n is the largest element in w and u and v are shorter sequences, and set S(w) = S(u)S(v)n, with S being the identity for one-element sequences.
+    11. Number of permutations of {1, …, n} that avoid the pattern 123 (or any of the other patterns of length 3); that is, the number of permutations with no three-term increasing subsequence. For n = 3, these permutations are 132, 213, 231, 312 and 321. For n = 4, they are 1432, 2143, 2413, 2431, 3142, 3214, 3241, 3412, 3421, 4132, 4213, 4231, 4312 and 4321
+    */
+}
