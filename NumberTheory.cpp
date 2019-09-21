@@ -1,8 +1,8 @@
 #include<bits/stdc++.h>
 using namespace std;
 #define ll long long
+#define ull unsigned long long
 ll num[50],rem[50];
-
 ll inv(ll a, ll m) // returns inverse(a)%m
 {
     ll m0 = m, t, q;
@@ -86,4 +86,39 @@ ll catalan_number(ll n) //returns nTh catalan number
     10. Number of stack-sortable permutations of {1, …, n}. A permutation w is called stack-sortable if S(w) = (1, …, n), where S(w) is defined recursively as follows: write w = unv where n is the largest element in w and u and v are shorter sequences, and set S(w) = S(u)S(v)n, with S being the identity for one-element sequences.
     11. Number of permutations of {1, …, n} that avoid the pattern 123 (or any of the other patterns of length 3); that is, the number of permutations with no three-term increasing subsequence. For n = 3, these permutations are 132, 213, 231, 312 and 321. For n = 4, they are 1432, 2143, 2413, 2431, 3142, 3214, 3241, 3412, 3421, 4132, 4213, 4231, 4312 and 4321
     */
+}
+ull mul(ull a, ull b)
+{
+    ull res = 0;
+
+    while (b){
+        if (b & 1LL) res = (res + a);
+        if (res >= n) return 0;
+        a = (a << 1LL);
+        b >>= 1LL;
+    }
+
+    return res;
+}
+int p, primes[] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 51, 53, 59, 61, 67, 71};
+void backtrack(int i, int lim, ull val, ull r)
+{
+    if (r > res) res = r;
+    if (i == p) return;
+
+    int d;
+    ull x = val;
+
+    for (d = 1; d <= lim; d++){
+        x = mul(x, primes[i]);
+        if (x == 0) return;
+        backtrack(i + 1, d, x, r * (d + 1));
+    }
+}
+ull maximum_NOD_of_any_number_less_than_N(ull n)
+{
+    p = sizeof(primes) / sizeof(int);
+    res=0;
+    backtrack(0, 100, 1, 1);
+    return res;
 }
