@@ -24,7 +24,39 @@ ll inv(ll a, ll m) // returns inverse(a)%m
 
     return x1;
 }
-
+int SNOD( int n ) //Sum of NOD
+{
+    int res = 0;
+    int u = sqrt(n);
+    for ( int i = 1; i <= u; i++ ) {
+        res += ( n / i ) - i;
+    }
+    res *= 2;
+    res += u;
+    return res;
+}
+int SOD( int n )
+{
+    int res = 1;
+    int sqrtn = sqrt ( n );
+    for ( int i = 0; i < prime.size() && prime[i] <= sqrtn; i++ ) {
+        if ( n % prime[i] == 0 ) {
+            int tempSum = 1; // Contains value of (p^0+p^1+...p^a)
+            int p = 1;
+            while ( n % prime[i] == 0 ) {
+                n /= prime[i];
+                p *= prime[i];
+                tempSum += p;
+            }
+            sqrtn = sqrt ( n );
+            res *= tempSum;
+        }
+    }
+    if ( n != 1 ) {
+        res *= ( n + 1 ); // Need to multiply (p^0+p^1)
+    }
+    return res;
+}
 ll ChineseRemainder(int k) // given some numbers num[] and reminders rem[] find smallest x such that x%num[i]=rem[i] for all i from 0 to k
 {
     ll prod = 1;
