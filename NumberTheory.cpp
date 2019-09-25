@@ -11,6 +11,7 @@ void computeCoprimeDivisor() // generate pairwise coprime divisors of N.
     {
         if(prime[i]==0)
         {
+            // pr vector holds the divisor of i which is pairwise coprime
             pr[i].push_back(i);
             {
                 for(int j=i+i; j<MX; j+=i)
