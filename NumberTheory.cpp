@@ -5,6 +5,43 @@ using namespace std;
 ll num[50],rem[50];
 vector<ll>parts
 char s[100005];
+void computeCoprimeDivisor() // generate pairwise coprime divisors of N. 
+{
+    for(int i=2; i<MX; i++)
+    {
+        if(prime[i]==0)
+        {
+            pr[i].push_back(i);
+            {
+                for(int j=i+i; j<MX; j+=i)
+                {
+                    prime[j]=1;
+                    pr[j].push_back(fnc(j, i));
+ 
+                }
+            }
+        }
+    }
+ ////////////////////////// EXTRA START /////////////////////////////
+    primes[0]=2;
+    int k=1;
+    for(int i=3; i<MX; i+=2) // storing primes
+    {
+        if(prime[i]==0)
+            primes[k++]=i;
+    }
+ 
+ 
+    for(int i=0; i<k; i++) // computing perfect powers
+    {
+        int x=primes[i];
+ 
+        for(ll j=(ll)x*(ll)x ; j<=100000; j*=x)
+            perf[j]=1;
+ 
+    }
+     ////////////////////////// EXTRA END  /////////////////////////////
+}
 void divide(int len) // divides the actual string into several integer parts of 9 digits. 
 {
     // len= actual numerical string size
