@@ -3,6 +3,48 @@ using namespace std;
 #define ll long long
 #define ull unsigned long long
 ll num[50],rem[50];
+vector<ll>parts
+char s[100005];
+void divide(int len) // divides the actual string into several integer parts of 9 digits. 
+{
+    // len= actual numerical string size
+    parts.clear();
+    ll total=0;
+    int po=0;
+    for(int i=len-1; i>=0; i--){
+ 
+        ll add=s[i]-'0'; // s is the actual string
+        add*=power[po];
+        total+=add;
+        if(po==9 || i==0){
+ 
+            parts.push_back(total);
+            po=0;
+            total=0;
+        }
+        else po++;
+    }
+    reverse(parts.begin(), parts.end());
+}
+ 
+ll modulo(ll x) // calculates string modulo x efficiently
+{
+    ll mod=0;
+    for(int i=0; i<parts.size(); i++){
+ 
+        mod=mod*power[10];
+        mod%=x;
+        mod+=parts[i];
+        mod%=x;
+ 
+    }
+    return mod;
+}
+ll stringModx(ll x) // returns S % X where S is a numerical string.
+{
+    divide(strlen(s));
+    return modulo(x);
+}
 ll inv(ll a, ll m) // returns inverse(a)%m
 {
     ll m0 = m, t, q;
