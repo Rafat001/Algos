@@ -1,0 +1,51 @@
+inline ll mulmod(ll base, ll mul, ll modulo)
+{
+    ll ret = 0;
+    while(mul > 0){
+        if(mul%2==1) ret = (ret + base) % modulo;
+        base = (base + base) % modulo;
+        mul /= 2;
+    }
+    return (ret + modulo) % modulo;
+}
+inline ll bigmod(ll a, ll p, ll m)
+{
+    ll ret = 1;
+    while(p)
+    {
+        if(p & 1) ret = mulmod(ret, a, m);
+        a = mulmod(a, a, m);
+        p /= 2;
+    }
+    return ret;
+}
+
+inline bool miller(ll p, int iter = 20)
+{
+    if(p==3 || p==2 || p==5) return true;
+    if(p%2==0) return false;
+    if(p < 3) return false;
+    mt19937_64 rnd(chrono::steady_clock::now().time_since_epoch().count());
+
+    for(int i = 0; i<iter; i++)
+    {
+        ll a = (rnd()) % (p-4) + 2;
+        ll s = p-1;
+        while(s % 2 == 0) s/=2;
+        ll mod = bigmod(a, s, p);
+        if(mod==1 || mod==p-1) continue;
+        bool flag = 0;
+        s *= 2;
+        while(s != p-1)
+        {
+            mod = mulmod(mod, mod, p);
+            if(mod == p-1){
+                flag = 1;
+                break;
+            }
+            s *= 2;
+        }
+        if(flag==0) return 0;
+    }
+    return 1;
+}
