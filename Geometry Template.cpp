@@ -218,7 +218,7 @@ double polygonArea(int n)
         area += (polygon[j].x + polygon[i].x) * (polygon[j].y - polygon[i].y);
         j = i;
     }
-    return abs(area);
+    return fabs(area)*0.5;
 }
 double getTriangleArea(Point a, Point b, Point c)
 {
@@ -279,6 +279,30 @@ double angle(Point B, Point A, Point C)
     return (ans*180)/acos(-1);
 
 }
+
+// returns number of vertices on boundary of a polygon
+
+long long picks_theorem_boundary_count()
+{  int sz=polygon.size(), i ;
+    long long res=__gcd((long long)abs(polygon[0].x-polygon[sz-1].x),(long long)abs(polygon[0].y-polygon[sz-1].y));
+    for ( i = 0; i < sz-1 ; i++ )
+    {
+        res += __gcd((long long)abs(polygon[i].x-polygon[i+1].x),(long long)abs(polygon[i].y-polygon[i+1].y));
+    }
+    return res;
+}
+
+// picks theorem
+// Polygon area= inside points + boundary points/2 -1
+// return inside points counts
+long long lattice_points_inside_polygon()
+{
+    long long ar=polygonArea(n);
+    long long b=picks_theorem_boundary_count();
+    long long tot=ar+1-b/2;
+    return tot;
+}
+
 int main()
 {
 
