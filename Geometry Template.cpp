@@ -159,13 +159,16 @@ double distToLine(Point p, Point a, Point b)
     double dx=(double)p.x-c.first,dy=(double)p.y-c.second;
     return sqrt(dx*dx+dy*dy);
 }
-int orientation(Point p, Point q, Point r)
+long long orientation(Point p, Point q, Point r)
 {
-    int val = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
+    long long val = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
+    if (val > 0)
+        return 1;
+    if (val < 0)
+        return 2;
+    else
+        return val;
 
-    if (val == 0)
-        return 0;  // colinear
-    return (val > 0)? 1: 2; // clock or counterclock wise
 }
 // Given three colinear points p, q, r, the function checks if
 // point q lies on line segment 'pr'
@@ -221,17 +224,17 @@ double getTriangleArea(Point a, Point b, Point c)
 {
     return fabs(cross(b - a, c - a));
 }
-int compareConvex(const void *vp1, const void *vp2)
+bool compareConvex(Point X , Point Y)
 {
-   Point *p1 = (Point *)vp1;
-   Point *p2 = (Point *)vp2;
-
-   // Find orientation
-   int o = orientation(p0, *p1, *p2);
-   if (o == 0)
-     return (dist(p0, *p2) >= dist(p0, *p1))? -1 : 1;
-
-   return (o == 2)? -1: 1;
+    long long ret = orientation(points[0],X,Y);
+    if(ret==0)
+    {
+        long long dist11 = dist2(points[0],X);
+        long long dist22 = dist2(points[0],Y);
+        return dist11 < dist22 ;
+    }
+    else if(ret==2) return true ;
+    else return false ;
 }
 Point nextToTop(stack<Point> &S)
 {
@@ -242,39 +245,39 @@ Point nextToTop(stack<Point> &S)
     return res;
 }
 // make a minimum area polygon
-stack<Point> convexHull(Point points[], int n)
+stack<Point> convexHull(int N)
 {
-   int ymin = points[0].y, min = 0;
-   for (int i = 1; i < n; i++)
-   {
-     int y = points[i].y;
-     if ((y < ymin) || (ymin == y &&
-         points[i].x < points[min].x))
-        ymin = points[i].y, min = i;
-   }
-   swap(points[0], points[min]);
-   p0 = points[0]; // p0 is a global declared point
-   qsort(&points[1], n-1, sizeof(Point), compareConvex);
-   int m = 1;
-   for (int i=1; i<n; i++)
-   {
-       while (i < n-1 && orientation(p0, points[i],points[i+1]) == 0)
-          i++;
-       points[m] = points[i];
-       m++;
-   }
-   stack<Point> S;
-   if (m < 3) return S;
-   S.push(points[0]);
-   S.push(points[1]);
-   S.push(points[2]);
-   for (int i = 3; i < m; i++)
-   {
-      while (orientation(nextToTop(S), S.top(), points[i]) != 2)
-         S.pop();
-      S.push(points[i]);
-   }
-   return S;
+    int ymin = points[0].y , index = 0 ;
+    for(int i=1;i<N;i++)
+    {
+        if(points[i].y<ymin||(points[i].y==ymin&&points[i].x<points[index].x))
+        {
+            ymin = points[i].y ;
+            index = i ;
+        }
+    }
+    stack<Point>S;
+    swap(points[0],points[index]);
+    sort(&points[1],&points[N],compareConvex);
+    S.push(points[0]);
+    for(int i=1;i<N;i++)
+    {
+        while(S.size()>1&&orientation(nextToTop(S),S.top(),points[i])!=2){
+            S.pop();
+        }
+        S.push(points[i]);
+    }
+    return S;
+}
+// Angle between Line AB and AC in degree
+double angle(Point B, Point A, Point C)
+{
+    double c=dist(A,B);
+    double a=dist(B,C);
+    double b=dist(A,C);
+    double ans=acos((b*b+c*c-a*a)/(2*b*c));
+    return (ans*180)/acos(-1);
+
 }
 int main()
 {
