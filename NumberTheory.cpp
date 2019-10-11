@@ -5,7 +5,9 @@ using namespace std;
 ll num[50],rem[50];
 vector<ll>parts
 char s[100005];
-void computeCoprimeDivisor() // generate pairwise coprime divisors of N. 
+
+// generate pairwise coprime divisors of N. 
+void computeCoprimeDivisor() 
 {
     for(int i=2; i<MX; i++)
     {
@@ -43,7 +45,11 @@ void computeCoprimeDivisor() // generate pairwise coprime divisors of N.
     }
      ////////////////////////// EXTRA END  /////////////////////////////
 }
-void divide(int len) // divides the actual string into several integer parts of 9 digits. 
+
+// divides the actual string into several integer parts of 9 digits. 
+// used in efficient numerical string modulo x
+
+void divide(int len) 
 {
     // len= actual numerical string size
     parts.clear();
@@ -65,7 +71,8 @@ void divide(int len) // divides the actual string into several integer parts of 
     reverse(parts.begin(), parts.end());
 }
  
-ll modulo(ll x) // calculates string modulo x efficiently
+// calculates string modulo x efficiently
+ll modulo(ll x) 
 {
     ll mod=0;
     for(int i=0; i<parts.size(); i++){
@@ -78,12 +85,16 @@ ll modulo(ll x) // calculates string modulo x efficiently
     }
     return mod;
 }
-ll stringModx(ll x) // returns S % X where S is a numerical string.
+
+// returns S % X where S is a numerical string.
+ll stringModx(ll x) 
 {
     divide(strlen(s));
     return modulo(x);
 }
-ll inv(ll a, ll m) // returns inverse(a)%m
+
+// returns inverse(a)%m
+ll inv(ll a, ll m) 
 {
     ll m0 = m, t, q;
     ll x0 = 0, x1 = 1;
@@ -93,18 +104,20 @@ ll inv(ll a, ll m) // returns inverse(a)%m
 
     while (a > 1)
     {
-        q = a / m; // q is quotient
-        t = m; // m is remainder now, process same as euclid's algo
+        q = a / m; 
+        t = m; 
         m = a % m, a = t;
         t = x0;
         x0 = x1 - q * x0;
         x1 = t;
     }
-    if (x1 < 0) x1 += m0;  // Make x1 positive
+    if (x1 < 0) x1 += m0; 
 
     return x1;
 }
-int SNOD( int n ) //Sum of NOD
+
+//Sum of NOD
+int SNOD( int n ) 
 {
     int res = 0;
     int u = sqrt(n);
@@ -121,7 +134,9 @@ int SOD( int n )
     int sqrtn = sqrt ( n );
     for ( int i = 0; i < prime.size() && prime[i] <= sqrtn; i++ ) {
         if ( n % prime[i] == 0 ) {
-            int tempSum = 1; // Contains value of (p^0+p^1+...p^a)
+            
+            // Contains value of (p^0+p^1+...p^a)
+            int tempSum = 1; 
             int p = 1;
             while ( n % prime[i] == 0 ) {
                 n /= prime[i];
@@ -137,7 +152,11 @@ int SOD( int n )
     }
     return res;
 }
-ll ChineseRemainder(int k) // given some numbers num[] and reminders rem[] find smallest x such that x%num[i]=rem[i] for all i from 0 to k
+
+// given some numbers num[] and reminders rem[] find
+// smallest x such that x%num[i]=rem[i] for all i from 0 to k
+
+ll ChineseRemainder(int k) 
 {
     ll prod = 1;
     for (int i = 0; i < k; i++)
@@ -153,10 +172,12 @@ ll ChineseRemainder(int k) // given some numbers num[] and reminders rem[] find 
     return result % prod;
 }
 
-ll largestPower(ll n, ll p) //Legendre’s formula.. returns largest power of P that divides n!
+//Legendre’s formula.. returns largest power of P that divides n!
+ll largestPower(ll n, ll p) 
 {
     ll x = 0;
-    while (n) // Calculate x = n/p + n/(p^2) + n/(p^3) + ....
+    // Calculate x = n/p + n/(p^2) + n/(p^3) + ....
+    while (n) 
     {
         n /= p;
         x += n;
@@ -181,7 +202,9 @@ ll trailing_Zeroes_of_N_Factorial_in_base_b(ll n, ll b)
     if(b!=1) ans=min(ans,largestPower(n,b));
     return ans;
 }
-ll catalan_number(ll n) //returns nTh catalan number
+
+//returns nTh catalan number
+ll catalan_number(ll n) 
 {
     ll c=nCr(2*n,n);
     return c/(n+1);
